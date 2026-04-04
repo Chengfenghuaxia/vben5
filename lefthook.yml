@@ -45,6 +45,7 @@ pre-commit:
   parallel: true
   commands:
     code-workspace:
+      glob: 'vben-admin.code-workspace'
       run: pnpm vsh code-workspace --auto-commit
     lint-md:
       run: pnpm oxfmt {staged_files}
