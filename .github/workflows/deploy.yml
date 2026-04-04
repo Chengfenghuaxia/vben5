@@ -1,0 +1,38 @@
+name: Deploy Website on push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-antd-ftp:
+    name: Deploy Ant Design app (FTP)
+    if: github.actor != 'dependabot[bot]' && !contains(github.event.head_commit.message, '[skip ci]') && github.repository == 'Chengfenghuaxia/vben5'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Sed Config Base
+        shell: bash
+        run: |
+          sed -i  "s#VITE_COMPRESS\s*=.*#VITE_COMPRESS = gzip#g" ./apps/web-antd/.env.production
+          sed -i  "s#VITE_PWA\s*=.*#VITE_PWA = true#g" ./apps/web-antd/.env.production
+          cat ./apps/web-antd/.env.production
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: pnpm run build:antd
+
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.PRO_FTP_HOST }}
+          username: ${{ secrets.WEB_ANTD_FTP_ACCOUNT }}
+          password: ${{ secrets.WEB_ANTD_FTP_PASSWORD }}
+          local-dir: ./apps/web-antd/dist/
