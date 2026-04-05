@@ -121,10 +121,12 @@ function methodDisplay(row: WithdrawalWayRow) {
     return null;
   }
   const n = Number(row.method);
-  return WITHDRAWAL_WAY_METHOD_MAP[n] ?? {
-    color: 'default',
-    label: '未知',
-  };
+  return (
+    WITHDRAWAL_WAY_METHOD_MAP[n] ?? {
+      color: 'default',
+      label: '未知',
+    }
+  );
 }
 
 async function onStatusChange(row: WithdrawalWayRow, checked: unknown) {
@@ -151,10 +153,7 @@ async function onStatusChange(row: WithdrawalWayRow, checked: unknown) {
     />
     <Grid table-title="取现管理">
       <template #colMethod="{ row }">
-        <template
-          v-for="m in [methodDisplay(row)]"
-          :key="`${row.id}-method`"
-        >
+        <template v-for="m in [methodDisplay(row)]" :key="`${row.id}-method`">
           <Tag v-if="m" :color="m.color">{{ m.label }}</Tag>
         </template>
       </template>
