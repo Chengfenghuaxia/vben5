@@ -261,18 +261,21 @@ onUnmounted(() => {
 
 <style scoped>
 .sortable-ghost {
-  opacity: 0.5;
   background: #f0f0f0;
+  opacity: 0.5;
 }
+
 .sortable-chosen {
   cursor: move;
 }
+
 .sortable-drag {
   opacity: 0.8;
 }
+
 .highlight-game {
-  border: 2px solid #52c41a !important;
-  box-shadow: 0 0 8px rgba(82, 196, 26, 0.4);
   background-color: #f6ffed;
+  border: 2px solid #52c41a !important;
+  box-shadow: 0 0 8px rgb(82 196 26 / 40%);
 }
 </style>

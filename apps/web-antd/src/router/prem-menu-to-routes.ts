@@ -54,7 +54,14 @@ export function normalizePremMenus(inner: unknown): PremMenuNode[] {
     return [];
   }
   const o = inner as Record<string, unknown>;
-  const keys = ['menus', 'menuList', 'routes', 'list', 'items', 'children'] as const;
+  const keys = [
+    'menus',
+    'menuList',
+    'routes',
+    'list',
+    'items',
+    'children',
+  ] as const;
   for (const key of keys) {
     const v = o[key];
     if (Array.isArray(v)) {
@@ -67,7 +74,9 @@ export function normalizePremMenus(inner: unknown): PremMenuNode[] {
 /**
  * 解析 prem 接口原始 JSON（使用 `responseReturn: 'body'`，在此统一处理 code/data 与扁平结构）
  */
-export function parsePremResponseBody(body: unknown): { menus: PremMenuNode[] } {
+export function parsePremResponseBody(body: unknown): {
+  menus: PremMenuNode[];
+} {
   if (body == null) {
     return { menus: [] };
   }
@@ -78,7 +87,9 @@ export function parsePremResponseBody(body: unknown): { menus: PremMenuNode[] } 
 
   if ('data' in b) {
     if (!isPremApiSuccessCode(b.code)) {
-      const msg = String(b.msg ?? b.message ?? b.error ?? 'prem request failed');
+      const msg = String(
+        b.msg ?? b.message ?? b.error ?? 'prem request failed',
+      );
       throw new Error(msg);
     }
     return { menus: normalizePremMenus(b.data) };
@@ -129,6 +140,27 @@ function normalizePremApis(raw: unknown): number[] {
 }
 
 const PLACEHOLDER_VIEW = '/_core/fallback/coming-soon';
+
+/**
+ * 后端 prem 子项若使用绝对单段 path（如 `/role`、`/ip`），会与父级 `/manage` 脱节，
+ * 解析成不存在的 `/role/index` 而落到占位页。此处按 site 常用 `url` 与错误 path 回退到真实页面。
+ */
+const SITE_LEAF_VIEW_FALLBACK_BY_URL: Record<string, string> = {
+  ManageDep: '/manage/dep/index',
+  ManageIp: '/manage/ip/index',
+  ManageRole: '/manage/role/index',
+  ManageUserlist: '/manage/userlist/index',
+  manage_dep: '/manage/dep/index',
+  manage_ip: '/manage/ip/index',
+  manage_role: '/manage/role/index',
+  manage_userlist: '/manage/userlist/index',
+};
+
+/** 错误的全路径 → 本仓库 views 下的页面（与 site_ui 菜单 path 配置错误时兜底） */
+const SITE_LEAF_VIEW_FALLBACK_BY_ROUTE_PATH: Record<string, string> = {
+  '/ip': '/manage/ip/index',
+  '/role': '/manage/role/index',
+};
 
 /**
  * 与 `router/access.ts` → `generateRoutesByBackend` 的 pageMap 键一致
@@ -258,6 +290,39 @@ function resolveLeafComponent(
   return out;
 }
 
+function resolveLeafComponentWithFallback(
+  component: string | undefined,
+  routePath: string,
+  item: PremMenuNode,
+): string {
+  const primary = resolveLeafComponent(component, routePath);
+  if (primary !== PLACEHOLDER_VIEW) {
+    return primary;
+  }
+
+  const urlKey = String(item.url ?? '').trim();
+  const byUrl = SITE_LEAF_VIEW_FALLBACK_BY_URL[urlKey];
+  if (byUrl && viewFileExistsForBackendRoute(byUrl)) {
+    return byUrl;
+  }
+
+  const normalizedPath = routePath.replace(/\/$/, '') || '/';
+  const byPath = SITE_LEAF_VIEW_FALLBACK_BY_ROUTE_PATH[normalizedPath];
+  if (byPath && viewFileExistsForBackendRoute(byPath)) {
+    return byPath;
+  }
+
+  const fromPath = pathToViewFile(routePath);
+  if (
+    fromPath !== PLACEHOLDER_VIEW &&
+    viewFileExistsForBackendRoute(fromPath)
+  ) {
+    return fromPath;
+  }
+
+  return primary;
+}
+
 function transformOne(
   item: PremMenuNode,
   parentPath: string,
@@ -298,9 +363,10 @@ function transformOne(
   }
 
   return {
-    component: resolveLeafComponent(
+    component: resolveLeafComponentWithFallback(
       typeof item.component === 'string' ? item.component : undefined,
       path,
+      item,
     ),
     meta,
     name,

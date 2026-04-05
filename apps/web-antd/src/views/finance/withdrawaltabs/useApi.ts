@@ -42,10 +42,7 @@ export async function fetchWithdrawalTabsListApi(
 
 /** POST /site/v1/withdrawal/tabs/add */
 export async function addWithdrawalTabApi(body: Recordable<unknown>) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/withdrawal/tabs/add',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/withdrawal/tabs/add', body);
 }
 
 /** POST /site/v1/withdrawal/tabs/update */
@@ -58,8 +55,5 @@ export async function updateWithdrawalTabApi(body: Recordable<unknown>) {
 
 /** POST /site/v1/withdrawal/tabs/del */
 export async function delWithdrawalTabApi(body: Recordable<unknown>) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/withdrawal/tabs/del',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/withdrawal/tabs/del', body);
 }

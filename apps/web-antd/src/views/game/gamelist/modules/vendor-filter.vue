@@ -43,9 +43,7 @@ async function loadVendors() {
         label: item.name,
         value: item.code,
       }))
-      .filter(
-        (item) => item.value !== 'history' && item.value !== 'fav',
-      );
+      .filter((item) => item.value !== 'history' && item.value !== 'fav');
 
     const hotIndex = vendorList.findIndex((v) => v.value === 'hot');
     if (hotIndex !== -1) {
@@ -97,7 +95,9 @@ watch(
   async () => {
     await loadVendors();
     if (selectedVendor.value) {
-      const exists = vendors.value.some((v) => v.value === selectedVendor.value);
+      const exists = vendors.value.some(
+        (v) => v.value === selectedVendor.value,
+      );
       if (!exists) {
         selectedVendor.value = null;
         emit('change', null);
@@ -133,10 +133,7 @@ defineExpose({ refresh: loadVendors });
         >
           {{ vendor.label }}游戏
         </button>
-        <span
-          v-if="vendors.length === 0"
-          class="text-sm text-[#999]"
-        >
+        <span v-if="vendors.length === 0" class="text-sm text-[#999]">
           暂无场馆数据
         </span>
       </div>
@@ -146,13 +143,14 @@ defineExpose({ refresh: loadVendors });
 
 <style scoped>
 .vendor-button.active {
-  border-color: #1890ff !important;
-  background: #1890ff !important;
   color: #fff !important;
+  background: #1890ff !important;
+  border-color: #1890ff !important;
 }
+
 .vendor-button.active:hover {
+  color: #fff !important;
   background: #40a9ff !important;
   border-color: #40a9ff !important;
-  color: #fff !important;
 }
 </style>

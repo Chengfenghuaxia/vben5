@@ -49,12 +49,16 @@ export async function fetchFinChannelListApi(
 }
 
 /** POST /site/v1/finchannel/in/status — site_ui updatePayInStatus */
-export async function updateFinChannelPayInStatusApi(body: Recordable<unknown>) {
+export async function updateFinChannelPayInStatusApi(
+  body: Recordable<unknown>,
+) {
   return siteRequestClient.post<unknown>('/site/v1/finchannel/in/status', body);
 }
 
 /** POST /site/v1/finchannel/out/status — site_ui updatePayOutStatus */
-export async function updateFinChannelPayOutStatusApi(body: Recordable<unknown>) {
+export async function updateFinChannelPayOutStatusApi(
+  body: Recordable<unknown>,
+) {
   return siteRequestClient.post<unknown>(
     '/site/v1/finchannel/out/status',
     body,
@@ -62,7 +66,9 @@ export async function updateFinChannelPayOutStatusApi(body: Recordable<unknown>)
 }
 
 /** POST /site/v1/finchannel/in/weight/update — site_ui updatePayInWeight */
-export async function updateFinChannelPayInWeightApi(body: Recordable<unknown>) {
+export async function updateFinChannelPayInWeightApi(
+  body: Recordable<unknown>,
+) {
   return siteRequestClient.post<unknown>(
     '/site/v1/finchannel/in/weight/update',
     body,
@@ -101,11 +107,7 @@ export function unwrapFinChannelConfigPayload(
   }
   const o = raw as Record<string, unknown>;
   const inner = o.data;
-  if (
-    inner != null &&
-    typeof inner === 'object' &&
-    !Array.isArray(inner)
-  ) {
+  if (inner != null && typeof inner === 'object' && !Array.isArray(inner)) {
     return inner as Record<string, unknown>;
   }
   return o;

@@ -130,10 +130,7 @@ async function handleRemove(id: number) {
         <Tag>{{ accountBlacklistTypeLabel(row.account_type) }}</Tag>
       </template>
       <template #colOperate="{ row }">
-        <Popconfirm
-          title="确定解除黑名单吗？"
-          @confirm="handleRemove(row.id)"
-        >
+        <Popconfirm title="确定解除黑名单吗？" @confirm="handleRemove(row.id)">
           <Button v-if="isSiteRow(row)" type="primary" size="small">
             解除黑名单
           </Button>

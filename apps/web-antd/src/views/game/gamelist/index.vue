@@ -37,10 +37,7 @@ const router = useRouter();
 const mergedApis = computed(() => getMergedRouteApis(router));
 
 const canBatchShelf = computed(() =>
-  checkSiteApiPermission(
-    SITE_GAME_GAMELIST_PERM.BATCH_SHELF,
-    mergedApis.value,
-  ),
+  checkSiteApiPermission(SITE_GAME_GAMELIST_PERM.BATCH_SHELF, mergedApis.value),
 );
 const canBatchSort = computed(() =>
   checkSiteApiPermission(SITE_GAME_GAMELIST_PERM.BATCH_SORT, mergedApis.value),
@@ -148,11 +145,7 @@ function buildListParams(
   if (ih !== null && ih !== undefined && ih !== '') {
     params.is_hot = Number(ih);
   }
-  if (
-    listMode.value === 'fav' &&
-    sortField.value &&
-    sortOrder.value != null
-  ) {
+  if (listMode.value === 'fav' && sortField.value && sortOrder.value != null) {
     params.sort_field = sortField.value;
     params.sort_order = sortOrder.value;
   }
@@ -278,9 +271,7 @@ function getCheckboxRows(): GameListRow[] {
 
 function rowIconSrc(row: GameListRow) {
   const useSquareIcon = iconShape.value === 1;
-  const rel = useSquareIcon
-    ? row.icon
-    : row.rect_icon || row.icon || '';
+  const rel = useSquareIcon ? row.icon : row.rect_icon || row.icon || '';
   return resolveGameAssetUrl(String(rel ?? ''));
 }
 
@@ -323,7 +314,9 @@ async function gameBatch(status: number) {
   const rows = getCheckboxRows();
   const gameCodes = rows
     .map((r) => r.game_code)
-    .filter((c) => c !== undefined && c !== null && String(c) !== '') as string[];
+    .filter(
+      (c) => c !== undefined && c !== null && String(c) !== '',
+    ) as string[];
   if (gameCodes.length === 0) {
     message.warning('请先勾选游戏');
     return;
@@ -361,10 +354,7 @@ onActivated(() => {
 </script>
 
 <template>
-  <Page
-    auto-content-height
-    content-class="flex h-full min-h-0 flex-col gap-4"
-  >
+  <Page auto-content-height content-class="flex h-full min-h-0 flex-col gap-4">
     <VendorFilter
       ref="vendorFilterRef"
       class="shrink-0"
@@ -388,86 +378,86 @@ onActivated(() => {
     />
 
     <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
-    <Grid table-title="游戏列表">
-      <template #toolbar-tools>
-        <template v-if="listMode !== 'fav'">
+      <Grid table-title="游戏列表">
+        <template #toolbar-tools>
+          <template v-if="listMode !== 'fav'">
+            <Button
+              v-site-permission="SITE_GAME_GAMELIST_PERM.BATCH_SHELF"
+              :disabled="batchDisabled || !canBatchShelf"
+              :loading="batchLoadingDown"
+              class="mr-2"
+              ghost
+              size="small"
+              type="primary"
+              @click="gameBatch(2)"
+            >
+              批量下架
+            </Button>
+            <Button
+              v-site-permission="SITE_GAME_GAMELIST_PERM.BATCH_SHELF"
+              :disabled="batchDisabled || !canBatchShelf"
+              :loading="batchLoadingUp"
+              class="mr-2"
+              ghost
+              size="small"
+              type="primary"
+              @click="gameBatch(1)"
+            >
+              批量上架
+            </Button>
+            <Button
+              v-site-permission="SITE_GAME_GAMELIST_PERM.BATCH_SORT"
+              :disabled="!canBatchSort"
+              class="mr-2"
+              ghost
+              size="small"
+              type="primary"
+              @click="openBatchSort"
+            >
+              批量排序
+            </Button>
+          </template>
+        </template>
+
+        <template #colStatus="{ row }">
+          <Switch
+            :checked="row.status === 1"
+            :disabled="!canStatus"
+            :loading="statusLoadingId === row.id"
+            @change="(c) => onStatusChange(row, c)"
+          />
+        </template>
+        <template #colIsHot="{ row }">
+          <Switch
+            :checked="row.is_hot === 1"
+            :disabled="!canHot"
+            :loading="hotLoadingId === row.id"
+            @change="(c) => onHotChange(row, c)"
+          />
+        </template>
+        <template #colOperate="{ row }">
           <Button
-            v-site-permission="SITE_GAME_GAMELIST_PERM.BATCH_SHELF"
-            :disabled="batchDisabled || !canBatchShelf"
-            :loading="batchLoadingDown"
-            class="mr-2"
+            v-site-permission="SITE_GAME_GAMELIST_PERM.ROW_SORT"
+            :disabled="!canRowSort"
             ghost
             size="small"
             type="primary"
-            @click="gameBatch(2)"
+            @click="openSort(row)"
           >
-            批量下架
-          </Button>
-          <Button
-            v-site-permission="SITE_GAME_GAMELIST_PERM.BATCH_SHELF"
-            :disabled="batchDisabled || !canBatchShelf"
-            :loading="batchLoadingUp"
-            class="mr-2"
-            ghost
-            size="small"
-            type="primary"
-            @click="gameBatch(1)"
-          >
-            批量上架
-          </Button>
-          <Button
-            v-site-permission="SITE_GAME_GAMELIST_PERM.BATCH_SORT"
-            :disabled="!canBatchSort"
-            class="mr-2"
-            ghost
-            size="small"
-            type="primary"
-            @click="openBatchSort"
-          >
-            批量排序
+            排序
           </Button>
         </template>
-      </template>
-
-      <template #colStatus="{ row }">
-        <Switch
-          :checked="row.status === 1"
-          :disabled="!canStatus"
-          :loading="statusLoadingId === row.id"
-          @change="(c) => onStatusChange(row, c)"
-        />
-      </template>
-      <template #colIsHot="{ row }">
-        <Switch
-          :checked="row.is_hot === 1"
-          :disabled="!canHot"
-          :loading="hotLoadingId === row.id"
-          @change="(c) => onHotChange(row, c)"
-        />
-      </template>
-      <template #colOperate="{ row }">
-        <Button
-          v-site-permission="SITE_GAME_GAMELIST_PERM.ROW_SORT"
-          :disabled="!canRowSort"
-          ghost
-          size="small"
-          type="primary"
-          @click="openSort(row)"
-        >
-          排序
-        </Button>
-      </template>
-      <template #colIcon="{ row }">
-        <div class="flex justify-center py-1">
-          <img
-            v-if="rowIconSrc(row)"
-            :src="rowIconSrc(row)"
-            alt=""
-            class="block h-auto w-[100px] max-w-[100px] object-contain align-middle"
-          />
-        </div>
-      </template>
-    </Grid>
+        <template #colIcon="{ row }">
+          <div class="flex justify-center py-1">
+            <img
+              v-if="rowIconSrc(row)"
+              :src="rowIconSrc(row)"
+              alt=""
+              class="block h-auto w-[100px] max-w-[100px] object-contain align-middle"
+            />
+          </div>
+        </template>
+      </Grid>
     </div>
   </Page>
 </template>
@@ -475,31 +465,34 @@ onActivated(() => {
 <style scoped>
 /* 插件全局 .vxe-grid { height: auto !important } 在「顶栏 + 表格」布局下会导致整页被撑高，此处强制跟随 flex 剩余高度 */
 :deep(.game-gamelist-vxe-grid.vxe-grid) {
+  flex: 1 1 0%;
   height: 100% !important;
   min-height: 0;
-  flex: 1 1 0%;
 }
+
 :deep(.game-gamelist-vxe-grid .vxe-grid--layout-wrapper) {
-  min-height: 0;
-  flex: 1 1 0%;
   display: flex;
-  flex-direction: column;
-}
-:deep(.game-gamelist-vxe-grid .vxe-grid--layout-body-wrapper) {
-  min-height: 0;
   flex: 1 1 0%;
+  flex-direction: column;
+  min-height: 0;
+}
+
+:deep(.game-gamelist-vxe-grid .vxe-grid--layout-body-wrapper) {
+  flex: 1 1 0%;
+  min-height: 0;
   overflow: hidden;
 }
+
 :deep(.game-gamelist-vxe-grid .vxe-grid--layout-body-content-wrapper) {
-  min-height: 0;
   flex: 1 1 0%;
+  min-height: 0;
 }
 
 /* 图片列：取消单元格单行裁切，行高随图片完整高度撑开（对齐 site_ui 列表效果） */
 :deep(.game-gamelist-vxe-grid .game-gamelist-icon-cell .vxe-cell) {
-  overflow: visible !important;
-  white-space: normal !important;
-  line-height: normal !important;
   padding-block: 8px;
+  overflow: visible !important;
+  line-height: normal !important;
+  white-space: normal !important;
 }
 </style>

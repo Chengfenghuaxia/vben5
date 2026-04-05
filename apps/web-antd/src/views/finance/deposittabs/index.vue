@@ -62,9 +62,10 @@ function effectiveTemplateIdForList(): number {
   return 1;
 }
 
-function buildParams(
-  page: { currentPage: number; pageSize: number },
-): Record<string, unknown> {
+function buildParams(page: {
+  currentPage: number;
+  pageSize: number;
+}): Record<string, unknown> {
   const size = page.pageSize;
   return {
     limit: size,

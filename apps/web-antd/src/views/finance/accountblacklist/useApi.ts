@@ -25,7 +25,10 @@ function normalizeBlacklistListPayload(
     return { list: [], total: 0 };
   }
   const d = raw as Record<string, unknown>;
-  const list = (d.list ?? d.items ?? d.records ?? []) as FinanceAccountBlacklistRow[];
+  const list = (d.list ??
+    d.items ??
+    d.records ??
+    []) as FinanceAccountBlacklistRow[];
   const total = Number(d.total ?? d.count ?? 0);
   return { list, total: Number.isFinite(total) ? total : 0 };
 }

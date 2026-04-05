@@ -71,7 +71,12 @@ function buildListParams(
     size,
   };
   const mode = formValues.mode;
-  if (mode !== null && mode !== undefined && mode !== '' && Number(mode) !== 0) {
+  if (
+    mode !== null &&
+    mode !== undefined &&
+    mode !== '' &&
+    Number(mode) !== 0
+  ) {
     params.mode = Number(mode);
   }
   for (const key of ['status', 'pay_in_status', 'pay_out_status'] as const) {

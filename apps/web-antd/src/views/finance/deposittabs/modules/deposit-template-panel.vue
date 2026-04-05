@@ -64,7 +64,12 @@ const isDefaultSelected = computed(() => {
 });
 
 const tableColumns = [
-  { align: 'center' as const, dataIndex: 'name', key: 'name', title: '模板名称' },
+  {
+    align: 'center' as const,
+    dataIndex: 'name',
+    key: 'name',
+    title: '模板名称',
+  },
   {
     align: 'center' as const,
     dataIndex: 'rechargeRange',
@@ -118,9 +123,7 @@ function extractTeamIds(item: Record<string, unknown>): number[] {
   return [];
 }
 
-async function displayNameFor(
-  item: Record<string, unknown>,
-): Promise<string> {
+async function displayNameFor(item: Record<string, unknown>): Promise<string> {
   if (item.use_default === 1) {
     return '默认充值模板';
   }
@@ -164,7 +167,8 @@ async function processRawList(rawList: Record<string, unknown>[]) {
       name: String(item.name ?? item.template_name ?? displayName),
       raw: item,
       team_ids: extractTeamIds(item),
-      use_default: item.use_default != null ? Number(item.use_default) : undefined,
+      use_default:
+        item.use_default != null ? Number(item.use_default) : undefined,
     });
   }
   const defIdx = out.findIndex(
@@ -243,7 +247,9 @@ const filteredTeamOptions = computed(() => {
     }
   }
   const cur = new Set(tplForm.team_ids);
-  return teamOptions.value.filter((o) => !used.has(o.value) || cur.has(o.value));
+  return teamOptions.value.filter(
+    (o) => !used.has(o.value) || cur.has(o.value),
+  );
 });
 
 function openAddTemplate() {
@@ -300,7 +306,10 @@ async function saveTemplate() {
 }
 
 const cfgOpen = ref(false);
-const cfgForm = reactive({ max: undefined as number | undefined, min: undefined as number | undefined });
+const cfgForm = reactive({
+  max: undefined as number | undefined,
+  min: undefined as number | undefined,
+});
 const cfgFormRef = ref();
 
 function openConfig() {
@@ -371,8 +380,13 @@ defineExpose({
     <div class="mb-4 flex flex-wrap items-center gap-4">
       <div class="flex items-center gap-2">
         <span class="font-medium">充值模板列表</span>
-        <Tooltip title="温馨提示:若总代未设置专属充值模板,系统将自动使用平台默认充值模板。">
-          <span class="text-muted-foreground inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-current text-xs">?</span>
+        <Tooltip
+          title="温馨提示:若总代未设置专属充值模板,系统将自动使用平台默认充值模板。"
+        >
+          <span
+            class="text-muted-foreground inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-current text-xs"
+            >?</span
+          >
         </Tooltip>
       </div>
       <Button size="small" type="primary" @click="openAddTemplate">
@@ -417,12 +431,7 @@ defineExpose({
           <template v-if="column.key === 'rechargeRange'">
             <span class="text-muted-foreground">
               <template v-if="record.min != null">{{ record.min }}</template>
-              <template
-                v-if="
-                  record.min != null &&
-                  record.max != null
-                "
-              >
+              <template v-if="record.min != null && record.max != null">
                 -
               </template>
               <template v-if="record.max != null">{{ record.max }}</template>
@@ -438,7 +447,10 @@ defineExpose({
               >
                 更改总代
               </Button>
-              <span v-else class="text-muted-foreground cursor-not-allowed text-sm">
+              <span
+                v-else
+                class="text-muted-foreground cursor-not-allowed text-sm"
+              >
                 更改总代
               </span>
               <Button size="small" type="link" @click="openConfig">
@@ -453,7 +465,10 @@ defineExpose({
               >
                 删除模板
               </Button>
-              <span v-else class="text-muted-foreground cursor-not-allowed text-sm">
+              <span
+                v-else
+                class="text-muted-foreground cursor-not-allowed text-sm"
+              >
                 删除模板
               </span>
             </div>
@@ -474,12 +489,18 @@ defineExpose({
           name="name"
           :rules="[{ required: true, message: '请输入模板名称' }]"
         >
-          <Input v-model:value="tplForm.name" allow-clear placeholder="模板名称" />
+          <Input
+            v-model:value="tplForm.name"
+            allow-clear
+            placeholder="模板名称"
+          />
         </FormItem>
         <FormItem
           label="推广总代"
           name="team_ids"
-          :rules="[{ required: true, message: '请选择推广总代', type: 'array' }]"
+          :rules="[
+            { required: true, message: '请选择推广总代', type: 'array' },
+          ]"
         >
           <Select
             v-model:value="tplForm.team_ids"
@@ -512,11 +533,7 @@ defineExpose({
       <template #footer>
         <Space>
           <Button @click="tplModalOpen = false">取消</Button>
-          <Button
-            type="primary"
-            :loading="tplSaving"
-            @click="saveTemplate"
-          >
+          <Button type="primary" :loading="tplSaving" @click="saveTemplate">
             确定
           </Button>
         </Space>
@@ -567,11 +584,7 @@ defineExpose({
       <template #footer>
         <Space>
           <Button @click="cfgOpen = false">取消</Button>
-          <Button
-            type="primary"
-            :loading="cfgSaving"
-            @click="saveConfig"
-          >
+          <Button type="primary" :loading="cfgSaving" @click="saveConfig">
             确定
           </Button>
         </Space>
@@ -582,13 +595,13 @@ defineExpose({
 
 <style scoped>
 .template-chip {
-  border-radius: 4px;
   padding: 8px 16px;
   font-size: 14px;
   line-height: 1.5;
   white-space: nowrap;
-  outline: none;
   cursor: pointer;
+  outline: none;
+  border-radius: 4px;
   transition:
     color 0.2s,
     background-color 0.2s,
@@ -596,14 +609,14 @@ defineExpose({
 }
 
 .template-chip--plain {
-  border: 1px solid var(--ant-color-border);
-  background-color: var(--ant-color-fill-tertiary, rgb(0 0 0 / 6%));
   color: var(--ant-color-text);
+  background-color: var(--ant-color-fill-tertiary, rgb(0 0 0 / 6%));
+  border: 1px solid var(--ant-color-border);
 }
 
 .template-chip--plain:hover {
-  border-color: #1890ff;
   color: #1890ff;
+  border-color: #1890ff;
 }
 
 /**
@@ -611,15 +624,15 @@ defineExpose({
  * 不跟随时下主题的 `--ant-color-primary`（深色主题里 token 可能与背景拉不开）
  */
 .template-chip--selected {
-  border: 1px solid #1890ff;
-  background-color: #1890ff;
-  color: #fff;
   font-weight: 600;
+  color: #fff;
+  background-color: #1890ff;
+  border: 1px solid #1890ff;
 }
 
 .template-chip--selected:hover {
+  color: #fff;
   background-color: #40a9ff;
   border-color: #40a9ff;
-  color: #fff;
 }
 </style>

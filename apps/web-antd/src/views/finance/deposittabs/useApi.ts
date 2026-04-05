@@ -49,10 +49,7 @@ export async function addDepositTabApi(body: Recordable<unknown>) {
 
 /** POST /site/v1/deposit/tabs/update */
 export async function updateDepositTabApi(body: Recordable<unknown>) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/deposit/tabs/update',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/deposit/tabs/update', body);
 }
 
 /** POST /site/v1/deposit/tabs/del */
@@ -62,18 +59,12 @@ export async function delDepositTabApi(body: Recordable<unknown>) {
 
 /** POST /site/v1/deposit/template/add */
 export async function depositTemplateAddApi(body: Recordable<unknown>) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/deposit/template/add',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/deposit/template/add', body);
 }
 
 /** POST /site/v1/deposit/template/del */
 export async function depositTemplateDelApi(body: Recordable<unknown>) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/deposit/template/del',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/deposit/template/del', body);
 }
 
 /** POST /site/v1/deposit/template/config/update */
@@ -87,9 +78,7 @@ export async function depositTemplateConfigUpdateApi(
 }
 
 /** POST /site/v1/deposit/template/update */
-export async function depositTemplateUpdateTeamApi(
-  body: Recordable<unknown>,
-) {
+export async function depositTemplateUpdateTeamApi(body: Recordable<unknown>) {
   return siteRequestClient.post<unknown>(
     '/site/v1/deposit/template/update',
     body,

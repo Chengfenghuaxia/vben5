@@ -47,12 +47,11 @@ const loading = ref(false);
 const formRef = ref();
 
 const rules = computed((): FormProps['rules'] => {
-  const base: Record<string, (typeof requiredInput) | (typeof requiredNumber)> =
-    {
-      api: requiredInput,
-      mch_id: requiredInput,
-      sign_mode: requiredNumber,
-    };
+  const base: Record<string, typeof requiredInput | typeof requiredNumber> = {
+    api: requiredInput,
+    mch_id: requiredInput,
+    sign_mode: requiredNumber,
+  };
   if (model.sign_mode === 1) {
     base.public_key = requiredInput;
     base.private_key = requiredInput;
@@ -154,12 +153,7 @@ async function onSubmit() {
     destroy-on-close
     @cancel="close"
   >
-    <Form
-      ref="formRef"
-      layout="vertical"
-      :model="model"
-      :rules="rules"
-    >
+    <Form ref="formRef" layout="vertical" :model="model" :rules="rules">
       <Row :gutter="24">
         <Col :span="24">
           <FormItem label="请求域名" name="api">

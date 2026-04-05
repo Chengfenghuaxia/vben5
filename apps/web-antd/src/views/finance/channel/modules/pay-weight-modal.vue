@@ -1,13 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from 'vue';
 
-import {
-  Form,
-  FormItem,
-  InputNumber,
-  Modal,
-  message,
-} from 'ant-design-vue';
+import { Form, FormItem, InputNumber, Modal, message } from 'ant-design-vue';
 
 import type { FinChannelRow } from '../useApi';
 
@@ -103,7 +97,9 @@ async function onOk() {
         ]"
       >
         <template #label>
-          <span>权重 <span class="text-[var(--ant-color-error)]">1-100</span></span>
+          <span
+            >权重 <span class="text-[var(--ant-color-error)]">1-100</span></span
+          >
         </template>
         <InputNumber
           v-model:value="form.weight"

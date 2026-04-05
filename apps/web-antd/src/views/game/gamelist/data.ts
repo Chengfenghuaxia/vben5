@@ -65,7 +65,12 @@ export function buildGameListColumns(mode: GameListMode): VxeTableGridColumns {
     { field: 'venue_id', showOverflow: true, title: '场馆ID', width: 150 },
     { field: 'venue_code', showOverflow: true, title: '场馆Code', width: 150 },
     { field: 'game_code', showOverflow: true, title: '游戏code', width: 150 },
-    { field: 'game_name', showOverflow: true, title: '游戏名称', minWidth: 150 },
+    {
+      field: 'game_name',
+      showOverflow: true,
+      title: '游戏名称',
+      minWidth: 150,
+    },
     {
       /** 必须可纵向撑开，与 site_ui 固定宽 100px、高度随比例一致 */
       className: 'game-gamelist-icon-cell',

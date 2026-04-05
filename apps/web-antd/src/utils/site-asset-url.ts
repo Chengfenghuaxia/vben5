@@ -9,8 +9,7 @@
  */
 export function getSiteAssetBaseUrl(): string {
   const raw = import.meta.env.VITE_GLOB_SITE_S3;
-  const s =
-    raw === undefined || raw === null ? '' : String(raw).trim();
+  const s = raw === undefined || raw === null ? '' : String(raw).trim();
   if (s === '' || s === 'undefined/' || s === 'undefined') {
     return 'https://assets.xin/';
   }
