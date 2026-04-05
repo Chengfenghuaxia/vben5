@@ -9,7 +9,10 @@ import {
   fetchDepositTemplateListApi,
   fetchFinChannelAllListApi,
 } from '#/api/core/finance-deposit';
-import { defaultSiteTodayWallDateTimeRange, formatSiteDateTime } from '#/utils/datetime';
+import {
+  defaultSiteTodayWallDateTimeRange,
+  formatSiteDateTime,
+} from '#/utils/datetime';
 
 async function fetchTeamsForForm() {
   const list = await fetchTeamAllListApi();
@@ -17,7 +20,9 @@ async function fetchTeamsForForm() {
 }
 
 async function fetchAgentsForForm(params?: { team_ids?: number[] }) {
-  const ids = params?.team_ids?.filter((n) => Number.isFinite(Number(n))) as number[] | undefined;
+  const ids = params?.team_ids?.filter((n) => Number.isFinite(Number(n))) as
+    | number[]
+    | undefined;
   const list = await fetchAgentAllListApi(
     ids && ids.length > 0 ? { team_ids: ids } : {},
   );
@@ -89,7 +94,9 @@ export function useFinanceDepositGridFormSchema(): VbenFormSchema[] {
       },
       dependencies: {
         componentProps(values) {
-          const team_ids = Array.isArray(values.team_ids) ? values.team_ids : [];
+          const team_ids = Array.isArray(values.team_ids)
+            ? values.team_ids
+            : [];
           return {
             disabled: team_ids.length === 0,
             params: { team_ids },

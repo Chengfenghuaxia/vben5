@@ -61,7 +61,9 @@ function normalizeDepositListPayload(raw: unknown): FinanceDepositListResult {
     list: Array.isArray(list) ? list : [],
     success_rate: (() => {
       const s =
-        typeof d.success_rate === 'number' ? d.success_rate : Number(d.success_rate);
+        typeof d.success_rate === 'number'
+          ? d.success_rate
+          : Number(d.success_rate);
       return Number.isFinite(s) ? s : 0;
     })(),
     total: Number.isFinite(total) ? total : 0,
@@ -72,7 +74,10 @@ function normalizeDepositListPayload(raw: unknown): FinanceDepositListResult {
 export async function fetchFinanceDepositListApi(
   params: Recordable<unknown>,
 ): Promise<FinanceDepositListResult> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/deposit/list', params);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/deposit/list',
+    params,
+  );
   return normalizeDepositListPayload(data);
 }
 
@@ -88,7 +93,10 @@ export async function createFinanceDepositOrderApi(body: Recordable<unknown>) {
 
 /** POST /site/v1/export/financial/deposit/export */
 export async function exportFinanceDepositListApi(body: Recordable<unknown>) {
-  return siteRequestClient.post<unknown>('/site/v1/export/financial/deposit/export', body);
+  return siteRequestClient.post<unknown>(
+    '/site/v1/export/financial/deposit/export',
+    body,
+  );
 }
 
 export interface FinChannelOptionRow {
@@ -126,7 +134,9 @@ function normalizeFinChannelList(raw: unknown): FinChannelOptionRow[] {
     out.push({
       code,
       name: name || code,
-      pay_in_status: Number.isFinite(Number(pay_in_status)) ? Number(pay_in_status) : undefined,
+      pay_in_status: Number.isFinite(Number(pay_in_status))
+        ? Number(pay_in_status)
+        : undefined,
     });
   }
   return out;
@@ -136,7 +146,10 @@ function normalizeFinChannelList(raw: unknown): FinChannelOptionRow[] {
 export async function fetchFinChannelAllListApi(
   body: Recordable<unknown> = {},
 ): Promise<FinChannelOptionRow[]> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/finchannel/all/list', body);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/finchannel/all/list',
+    body,
+  );
   return normalizeFinChannelList(data);
 }
 
@@ -168,6 +181,9 @@ function normalizeTemplateList(raw: unknown): DepositTemplateRow[] {
 export async function fetchDepositTemplateListApi(
   body: Recordable<unknown> = {},
 ): Promise<DepositTemplateRow[]> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/deposit/template/list', body);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/deposit/template/list',
+    body,
+  );
   return normalizeTemplateList(data);
 }

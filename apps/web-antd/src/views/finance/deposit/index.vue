@@ -17,7 +17,10 @@ import { siteDateTimeWallRangeToUtcMillis } from '#/utils/datetime';
 import { Button, message, Tag } from 'ant-design-vue';
 import { reactive, ref } from 'vue';
 
-import { useFinanceDepositColumns, useFinanceDepositGridFormSchema } from './data';
+import {
+  useFinanceDepositColumns,
+  useFinanceDepositGridFormSchema,
+} from './data';
 import FinanceDepositCreateOrderModal from './modules/create-order-modal.vue';
 import FinanceDepositExportRangeModal from './modules/export-range-modal.vue';
 import FinanceDepositExportRecordModal from './modules/export-record-modal.vue';
@@ -57,7 +60,10 @@ function buildListParams(
     page: page.currentPage,
     size: page.pageSize,
   };
-  if (formValues.order_id != null && String(formValues.order_id).trim() !== '') {
+  if (
+    formValues.order_id != null &&
+    String(formValues.order_id).trim() !== ''
+  ) {
     params.order_id = String(formValues.order_id).trim();
   }
   if (formValues.uid != null && formValues.uid !== '') {
@@ -132,7 +138,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
             stats.deposit_amount = res.deposit_amount ?? 0;
             stats.fee = res.fee ?? 0;
             const sr = res.success_rate;
-            stats.success_rate = typeof sr === 'number' && Number.isFinite(sr) ? sr : Number(sr) || 0;
+            stats.success_rate =
+              typeof sr === 'number' && Number.isFinite(sr)
+                ? sr
+                : Number(sr) || 0;
             return {
               items: res.list,
               page: { total: res.total },
@@ -221,7 +230,10 @@ const statusTag = (v: unknown) => {
       :row="setSuccessRow"
       @success="onRefresh"
     />
-    <FinanceDepositCreateOrderModal v-model:open="createOpen" @success="onRefresh" />
+    <FinanceDepositCreateOrderModal
+      v-model:open="createOpen"
+      @success="onRefresh"
+    />
     <FinanceDepositExportRangeModal
       v-model:open="exportRangeOpen"
       :total="listTotal"
@@ -264,7 +276,10 @@ const statusTag = (v: unknown) => {
       </template>
 
       <template #colGiftStatus="{ row }">
-        <Tag v-if="giftTag(row.gift_status)" :color="giftTag(row.gift_status)!.color">
+        <Tag
+          v-if="giftTag(row.gift_status)"
+          :color="giftTag(row.gift_status)!.color"
+        >
           {{ giftTag(row.gift_status)!.text }}
         </Tag>
       </template>

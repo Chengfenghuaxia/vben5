@@ -81,7 +81,9 @@ const [Form, formApi] = useVbenForm({
       },
       fieldName: 'gift_status',
       label: '充值赠送活动状态',
-      rules: z.coerce.number().refine((n) => n === 1 || n === 2, { message: '请选择' }),
+      rules: z.coerce
+        .number()
+        .refine((n) => n === 1 || n === 2, { message: '请选择' }),
     },
     {
       component: 'Input',

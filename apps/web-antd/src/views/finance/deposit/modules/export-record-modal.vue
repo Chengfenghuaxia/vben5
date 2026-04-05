@@ -1,6 +1,13 @@
 <script lang="ts" setup>
 import { useVbenModal } from '@vben/common-ui';
-import { Button, message, Popconfirm, Progress, Table, Tag } from 'ant-design-vue';
+import {
+  Button,
+  message,
+  Popconfirm,
+  Progress,
+  Table,
+  Tag,
+} from 'ant-design-vue';
 import { computed, h, reactive, ref, watch } from 'vue';
 
 import {
@@ -97,7 +104,12 @@ const columns = [
     width: 170,
   },
   { dataIndex: 'operator', key: 'operator', title: '操作人', width: 120 },
-  { dataIndex: 'file_name', ellipsis: true, key: 'file_name', title: '文件名称' },
+  {
+    dataIndex: 'file_name',
+    ellipsis: true,
+    key: 'file_name',
+    title: '文件名称',
+  },
   {
     customRender: ({ record }: { record: { status?: number } }) => {
       const m: Record<number, { color: string; text: string }> = {
@@ -118,13 +130,21 @@ const columns = [
     width: 100,
   },
   {
-    customRender: ({ record }: { record: { progress?: number; status?: number } }) =>
+    customRender: ({
+      record,
+    }: {
+      record: { progress?: number; status?: number };
+    }) =>
       h(Progress, {
         percent: Math.floor(Number(record.progress ?? 0) * 100),
         showInfo: true,
         size: 'small',
         status:
-          record.status === 3 ? 'exception' : record.status === 2 ? 'success' : 'active',
+          record.status === 3
+            ? 'exception'
+            : record.status === 2
+              ? 'success'
+              : 'active',
         strokeColor: record.status === 3 ? '#f5222d' : undefined,
       }),
     dataIndex: 'progress',
@@ -133,11 +153,20 @@ const columns = [
     width: 160,
   },
   {
-    customRender: ({ record }: { record: { id?: number; status?: number; url?: string } }) => {
+    customRender: ({
+      record,
+    }: {
+      record: { id?: number; status?: number; url?: string };
+    }) => {
       if (record.status === 2) {
         return h(
           Button,
-          { ghost: true, size: 'small', type: 'primary', onClick: () => download(record.url) },
+          {
+            ghost: true,
+            size: 'small',
+            type: 'primary',
+            onClick: () => download(record.url),
+          },
           () => '下载',
         );
       }
@@ -154,7 +183,11 @@ const columns = [
           },
         );
       }
-      return h(Button, { disabled: true, ghost: true, size: 'small' }, () => '导出中');
+      return h(
+        Button,
+        { disabled: true, ghost: true, size: 'small' },
+        () => '导出中',
+      );
     },
     key: 'operate',
     title: '操作',
@@ -191,7 +224,9 @@ watch(
       * 单表最多导出 100 万条数据，超出部分将分表导出（以后端为准）
     </p>
     <div class="mb-2 flex justify-end">
-      <Button :loading="loading" size="small" type="primary" ghost @click="load">刷新</Button>
+      <Button :loading="loading" size="small" type="primary" ghost @click="load"
+        >刷新</Button
+      >
     </div>
     <Table
       :columns="columns"
