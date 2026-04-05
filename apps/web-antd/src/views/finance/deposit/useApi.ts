@@ -103,6 +103,7 @@ export interface FinChannelOptionRow {
   code: string;
   name: string;
   pay_in_status?: number;
+  pay_out_status?: number;
 }
 
 function normalizeFinChannelList(raw: unknown): FinChannelOptionRow[] {
@@ -131,24 +132,34 @@ function normalizeFinChannelList(raw: unknown): FinChannelOptionRow[] {
         : pis != null && pis !== ''
           ? Number(pis)
           : undefined;
+    const pos = r.pay_out_status;
+    const pay_out_status =
+      typeof pos === 'number'
+        ? pos
+        : pos != null && pos !== ''
+          ? Number(pos)
+          : undefined;
     out.push({
       code,
       name: name || code,
       pay_in_status: Number.isFinite(Number(pay_in_status))
         ? Number(pay_in_status)
         : undefined,
+      pay_out_status: Number.isFinite(Number(pay_out_status))
+        ? Number(pay_out_status)
+        : undefined,
     });
   }
   return out;
 }
 
-/** POST /site/v1/finchannel/all/list */
+/** GET /site/v1/finchannel/all/list（站点多为 GET；POST 会返回 405） */
 export async function fetchFinChannelAllListApi(
-  body: Recordable<unknown> = {},
+  params: Recordable<unknown> = {},
 ): Promise<FinChannelOptionRow[]> {
-  const data = await siteRequestClient.post<unknown>(
+  const data = await siteRequestClient.get<unknown>(
     '/site/v1/finchannel/all/list',
-    body,
+    { params },
   );
   return normalizeFinChannelList(data);
 }
