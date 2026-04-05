@@ -21,12 +21,20 @@ export type SitePermissionValue =
   | number
   | { apis?: number[]; id: number | number[] };
 
+/**
+ * 合并当前 URL 匹配到的各级路由的 `meta.apis`（与 site 常见做法一致：权限挂在父级「推广」目录上，子菜单未重复带 apis）。
+ */
 function resolveApis(explicit?: number[]): number[] {
   if (explicit && explicit.length > 0) {
     return explicit;
   }
-  const meta = router.currentRoute.value.meta;
-  return normalizeApisArray(meta.apis);
+  const merged = new Set<number>();
+  for (const record of router.currentRoute.value.matched) {
+    for (const id of normalizeApisArray(record.meta?.apis)) {
+      merged.add(id);
+    }
+  }
+  return [...merged];
 }
 
 function parseBinding(binding: DirectiveBinding<SitePermissionValue>): {

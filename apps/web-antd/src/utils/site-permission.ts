@@ -1,6 +1,22 @@
+import type { Router } from 'vue-router';
+
 /**
- * 与 site_ui `utils/checkPermission.ts` 一致：判断权限 id 是否在当前页的 apis 列表中。
- * 开发环境下若路由未携带 `meta.apis`（空数组），默认放行，避免本地 prem mock 无 apis 时整页按钮不可用。
+ * 当前路由 `matched` 上各级 `meta.apis` 的并集（与 `v-site-permission` 一致）。
+ */
+export function getMergedRouteApis(router: Router): number[] {
+  const merged = new Set<number>();
+  for (const record of router.currentRoute.value.matched) {
+    for (const id of normalizeApisArray(record.meta?.apis)) {
+      merged.add(id);
+    }
+  }
+  return [...merged];
+}
+
+/**
+ * 与 site_ui `utils/checkPermission.ts` 一致：判断权限 id 是否在「当前页可用」的 apis 列表中。
+ * 实际调用处（`v-site-permission`）会把 `route.matched` 上各级的 `meta.apis` 做并集，与常见 prem 挂在父级菜单的行为一致。
+ * 开发环境下若合并后仍无 apis，默认放行，避免本地 prem mock 无 apis 时整页按钮不可用。
  */
 export function normalizeApisArray(raw: unknown): number[] {
   if (!Array.isArray(raw)) {

@@ -13,6 +13,14 @@ export default eventHandler((event) => {
   return useResponseSuccess({
     menus: [
       {
+        component: '/home/index',
+        icon: 'lucide:layout-template',
+        name: '首页',
+        path: '/home',
+        sort: -2,
+        url: 'SiteHome',
+      },
+      {
         children: [
           {
             component: '/dashboard/analytics/index',
@@ -36,6 +44,31 @@ export default eventHandler((event) => {
         path: '/dashboard',
         sort: -1,
         url: 'Dashboard',
+      },
+      {
+        children: [
+          {
+            component: '/acting/team/index',
+            icon: 'lucide:users-round',
+            name: '推广总代',
+            path: '/acting/team',
+            sort: 0,
+            url: 'ActingTeam',
+          },
+          {
+            component: '/acting/agent/index',
+            icon: 'lucide:user-cog',
+            name: '推广代理',
+            path: '/acting/agent',
+            sort: 1,
+            url: 'ActingAgent',
+          },
+        ],
+        icon: 'lucide:megaphone',
+        name: '推广',
+        path: '/acting',
+        sort: 1,
+        url: 'Acting',
       },
     ],
   });
