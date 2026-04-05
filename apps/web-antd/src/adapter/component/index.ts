@@ -75,6 +75,9 @@ const RadioGroup = defineAsyncComponent(() =>
 const RangePicker = defineAsyncComponent(() =>
   import('ant-design-vue/es/date-picker').then((res) => res.RangePicker),
 );
+const SiteRangePicker = defineAsyncComponent(
+  () => import('#/components/site/site-range-picker.vue'),
+);
 const Rate = defineAsyncComponent(() => import('ant-design-vue/es/rate'));
 const Select = defineAsyncComponent(() => import('ant-design-vue/es/select'));
 const Space = defineAsyncComponent(() => import('ant-design-vue/es/space'));
@@ -584,6 +587,7 @@ export type ComponentType =
   | 'RangePicker'
   | 'Rate'
   | 'Select'
+  | 'SiteRangePicker'
   | 'Space'
   | 'Switch'
   | 'Textarea'
@@ -645,6 +649,7 @@ async function initComponentAdapter() {
     Radio,
     RadioGroup,
     RangePicker,
+    SiteRangePicker,
     Rate,
     Select: withDefaultPlaceholder(Select, 'select'),
     Space,

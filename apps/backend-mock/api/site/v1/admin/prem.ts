@@ -70,6 +70,23 @@ export default eventHandler((event) => {
         sort: 1,
         url: 'Acting',
       },
+      {
+        children: [
+          {
+            component: '/finance/deposit/index',
+            icon: 'lucide:wallet',
+            name: '充值订单',
+            path: '/finance/deposit',
+            sort: 0,
+            url: 'FinanceDeposit',
+          },
+        ],
+        icon: 'lucide:banknote',
+        name: '财务管理',
+        path: '/finance',
+        sort: 2,
+        url: 'Finance',
+      },
     ],
   });
 });
