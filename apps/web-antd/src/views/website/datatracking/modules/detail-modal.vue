@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ActingDataTrackingRow } from '#/api/core/acting-data-tracking';
+import type { ActingDataTrackingRow } from '../useApi';
 
 import { useVbenModal } from '@vben/common-ui';
 import { message } from 'ant-design-vue';
@@ -10,7 +10,7 @@ import {
   exportActingDataTrackingLoginApi,
   exportActingDataTrackingRegisterApi,
   fetchActingDataTrackingRecordListApi,
-} from '#/api/core/acting-data-tracking';
+} from '../useApi';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { Button } from 'ant-design-vue';
 

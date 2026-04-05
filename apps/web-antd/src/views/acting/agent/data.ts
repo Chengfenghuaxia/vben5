@@ -1,10 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridColumns } from '#/adapter/vxe-table';
 
-import {
-  fetchAgentAllListApi,
-  fetchTeamAllListApi,
-} from '#/api/core/acting-agent';
+import { fetchAgentAllListApi, fetchTeamAllListApi } from './useApi';
 import { formatSiteDateTime } from '#/utils/datetime';
 
 async function fetchTeamsForForm() {

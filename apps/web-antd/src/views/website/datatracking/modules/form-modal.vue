@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ActingDataTrackingRow } from '#/api/core/acting-data-tracking';
+import type { ActingDataTrackingRow } from '../useApi';
 
 import { useVbenModal } from '@vben/common-ui';
 import { message } from 'ant-design-vue';
@@ -8,7 +8,7 @@ import { computed, nextTick, ref, watch } from 'vue';
 import {
   createActingDataTrackingApi,
   updateActingDataTrackingApi,
-} from '#/api/core/acting-data-tracking';
+} from '../useApi';
 import { useVbenForm, z } from '#/adapter/form';
 
 import {

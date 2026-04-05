@@ -3,14 +3,14 @@
  * 对应后端菜单 `component: /website/datatracking/index`，`path: /website/datatracking`
  * 与 site_ui `views/website/dataTracking` 路径一致
  */
-import type { ActingDataTrackingRow } from '#/api/core/acting-data-tracking';
+import type { ActingDataTrackingRow } from './useApi';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { Page } from '@vben/common-ui';
 import {
   deleteActingDataTrackingApi,
   fetchActingDataTrackingListApi,
-} from '#/api/core/acting-data-tracking';
+} from './useApi';
 import { SITE_DATA_TRACKING_PERM } from '#/constants/site-data-tracking-perm';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { siteCalendarDateRangeToUtcMillis } from '#/utils/datetime';

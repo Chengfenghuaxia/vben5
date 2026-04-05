@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SiteHomeFinData } from '#/api/core/site-home';
+import type { SiteHomeFinData } from '../useApi';
 
 import { computed, onMounted, ref } from 'vue';
 
@@ -107,7 +107,9 @@ function isNumericValue(value: unknown): value is number {
             <div class="text-base font-semibold">你好，{{ displayName }}</div>
             <div class="mt-2 text-sm text-[var(--ant-color-text-secondary)]">
               Version:
-              <span class="font-semibold text-[var(--ant-color-text)]">{{ version || '—' }}</span>
+              <span class="font-semibold text-[var(--ant-color-text)]">{{
+                version || '—'
+              }}</span>
             </div>
           </div>
         </div>
@@ -132,7 +134,10 @@ function isNumericValue(value: unknown): value is number {
                   </span>
                   <template v-if="isNumericValue(item.value2)">
                     <span class="text-sm"> /</span>
-                    <span class="text-xl underline" :style="item.color ? { color: item.color } : {}">
+                    <span
+                      class="text-xl underline"
+                      :style="item.color ? { color: item.color } : {}"
+                    >
                       {{ item.value2 }}
                     </span>
                   </template>
@@ -153,35 +158,35 @@ function isNumericValue(value: unknown): value is number {
 .stat-box {
   display: flex;
   min-height: 72px;
-  border-left: 1px dashed var(--ant-color-border-secondary, #7f7f7f);
-  padding-left: 20px;
   padding-right: 20px;
+  padding-left: 20px;
+  border-left: 1px dashed var(--ant-color-border-secondary, #7f7f7f);
 }
 
 .stat-inner {
   display: flex;
-  width: 100%;
+  gap: 8px;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 8px;
+  width: 100%;
 }
 
 .stat-text {
   display: flex;
-  min-height: 72px;
   flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  min-height: 72px;
   text-align: center;
 }
 
 .stat-icon {
   display: flex;
-  cursor: pointer;
   flex-direction: column;
   justify-content: flex-end;
   padding-bottom: 4px;
   color: var(--ant-color-text-secondary);
+  cursor: pointer;
 }
 </style>

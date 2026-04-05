@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ActingTeamRow } from '#/api/core/acting-team';
+import type { ActingTeamRow } from '../useApi';
 
 import { computed, ref, watch } from 'vue';
 
@@ -7,8 +7,17 @@ import {
   createActingTeamApi,
   fetchDomainAllListApi,
   updateActingTeamApi,
-} from '#/api/core/acting-team';
-import { Button, Form, FormItem, Input, message, Modal, Select, Space } from 'ant-design-vue';
+} from '../useApi';
+import {
+  Button,
+  Form,
+  FormItem,
+  Input,
+  message,
+  Modal,
+  Select,
+  Space,
+} from 'ant-design-vue';
 
 const props = defineProps<{
   row?: ActingTeamRow | null;
@@ -28,7 +37,9 @@ const loading = ref(false);
 
 const isEdit = computed(() => Boolean(props.row?.id));
 
-const selectedDomains = computed(() => domainListWithUsed.value.map((d) => d.domain));
+const selectedDomains = computed(() =>
+  domainListWithUsed.value.map((d) => d.domain),
+);
 
 const title = computed(() => (isEdit.value ? '推广总代编辑' : '推广总代新增'));
 
@@ -50,9 +61,16 @@ function initFromRow() {
   const domains = row?.domains;
   if (Array.isArray(domains) && domains.length > 0) {
     domainListWithUsed.value = domains.map((d) => {
-      const dom = typeof d === 'string' ? d : String((d as { domain?: string }).domain ?? '');
+      const dom =
+        typeof d === 'string'
+          ? d
+          : String((d as { domain?: string }).domain ?? '');
       const used =
-        typeof d === 'object' && d != null && (d as { used?: number }).used === 1 ? 1 : 2;
+        typeof d === 'object' &&
+        d != null &&
+        (d as { used?: number }).used === 1
+          ? 1
+          : 2;
       return { domain: dom, used: used as 1 | 2 };
     });
     return;
@@ -181,7 +199,9 @@ watch(
           <Select
             v-model:value="addDomainValue"
             :options="
-              domainOptions.filter((opt) => !selectedDomains.includes(opt.value))
+              domainOptions.filter(
+                (opt) => !selectedDomains.includes(opt.value),
+              )
             "
             allow-clear
             class="w-full"
@@ -194,7 +214,9 @@ watch(
     <template #footer>
       <Space :size="16">
         <Button @click="handleCancel">取消</Button>
-        <Button :loading="loading" type="primary" @click="handleOk">确定</Button>
+        <Button :loading="loading" type="primary" @click="handleOk"
+          >确定</Button
+        >
       </Space>
     </template>
   </Modal>
@@ -204,31 +226,36 @@ watch(
 .domain-list-wrap {
   width: 100%;
 }
+
 .domain-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 6px 8px;
   margin-bottom: 8px;
-  background: var(--ant-color-fill-quaternary, rgba(0, 0, 0, 0.04));
+  background: var(--ant-color-fill-quaternary, rgb(0 0 0 / 4%));
   border-radius: 6px;
 }
+
 .domain-item:last-of-type {
   margin-bottom: 8px;
 }
+
 .domain-text {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .domain-remove {
   flex-shrink: 0;
   padding: 0 4px;
 }
+
 .domain-fixed {
   flex-shrink: 0;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 </style>

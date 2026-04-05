@@ -1,20 +1,17 @@
 <script lang="ts" setup>
-import type {
-  SiteHomeFinData,
-  SiteHomeHourRow,
-  SiteHomeHistoryRow,
-} from '#/api/core/site-home';
+import {
+  type SiteHomeFinData,
+  type SiteHomeHistoryRow,
+  type SiteHomeHourRow,
+  fetchSiteActivityListApi,
+  fetchSiteHomeFinApi,
+  fetchSiteHomeOperationApi,
+} from './useApi';
 
 import { onMounted, ref } from 'vue';
 
 import { useSessionStorage } from '@vueuse/core';
 import { Col, Row, Space } from 'ant-design-vue';
-
-import {
-  fetchSiteActivityListApi,
-  fetchSiteHomeFinApi,
-  fetchSiteHomeOperationApi,
-} from '#/api/core/site-home';
 import { SITE_HOME_PERM } from '#/constants/site-home-perm';
 import { router } from '#/router';
 import { getMergedRouteApis } from '#/utils/site-permission';

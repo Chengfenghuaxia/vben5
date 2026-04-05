@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SiteHomeHourRow } from '#/api/core/site-home';
+import type { SiteHomeHourRow } from '../useApi';
 import type { EchartsUIType } from '@vben/plugins/echarts';
 
 import { nextTick, ref, watch } from 'vue';
@@ -147,7 +147,10 @@ function sliderMax() {
 
 <template>
   <Card :bordered="false" class="shadow-sm">
-    <div v-if="!data.length" class="py-16 text-center text-[var(--ant-color-text-secondary)]">
+    <div
+      v-if="!data.length"
+      class="py-16 text-center text-[var(--ant-color-text-secondary)]"
+    >
       暂无分时数据
     </div>
     <template v-else>
@@ -169,7 +172,7 @@ function sliderMax() {
 
 <style scoped>
 .home-op-slider :deep(.ant-slider-rail) {
-  background-color: rgba(52, 155, 213, 0.35);
+  background-color: rgb(52 155 213 / 35%);
 }
 
 .home-op-slider :deep(.ant-slider-track) {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SiteHomeHistoryRow } from '#/api/core/site-home';
+import type { SiteHomeHistoryRow } from '../useApi';
 import type { EchartsUIType } from '@vben/plugins/echarts';
 
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
@@ -209,7 +209,11 @@ onMounted(() => {
     <div class="metrics-chart-container">
       <div class="chart-section">
         <div class="checkbox-section">
-          <div v-for="metric in metrics" :key="metric.key" class="checkbox-item">
+          <div
+            v-for="metric in metrics"
+            :key="metric.key"
+            class="checkbox-item"
+          >
             <Checkbox v-model:checked="metric.checked">
               <span
                 class="color-indicator"
@@ -217,7 +221,10 @@ onMounted(() => {
               />
               <span class="metric-label">{{ metric.label }}</span>
               <Tooltip :title="metric.description" placement="top">
-                <IconifyIcon class="question-icon" icon="ant-design:question-circle-outlined" />
+                <IconifyIcon
+                  class="question-icon"
+                  icon="ant-design:question-circle-outlined"
+                />
               </Tooltip>
             </Checkbox>
           </div>
@@ -234,13 +241,19 @@ onMounted(() => {
             :class="{ active: selectedMetric?.key === metric.key }"
             @click="selectMetric(metric)"
           >
-            <span class="metric-color" :style="{ backgroundColor: metric.color }" />
+            <span
+              class="metric-color"
+              :style="{ backgroundColor: metric.color }"
+            />
             <span class="metric-name">
               {{ metric.label }}: {{ metricTotals[metric.key] ?? 0 }}
             </span>
           </div>
         </div>
-        <div v-if="apkDownloadToday || apkDownloadYesterday" class="apk-summary text-sm text-[var(--ant-color-text-secondary)]">
+        <div
+          v-if="apkDownloadToday || apkDownloadYesterday"
+          class="apk-summary text-sm text-[var(--ant-color-text-secondary)]"
+        >
           今日 APK 下载 {{ apkDownloadToday }} / 昨日 {{ apkDownloadYesterday }}
         </div>
       </div>
@@ -271,8 +284,8 @@ onMounted(() => {
 
 .checkbox-item :deep(.ant-checkbox-wrapper) {
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
 }
 
 .color-indicator {
@@ -302,9 +315,9 @@ onMounted(() => {
 
 .metrics-panel {
   display: flex;
-  width: 280px;
   flex-direction: column;
   gap: 16px;
+  width: 280px;
 }
 
 .metrics-title {
@@ -323,10 +336,10 @@ onMounted(() => {
 
 .metric-item {
   display: flex;
-  cursor: pointer;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   padding: 8px;
+  cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.2s;
 }

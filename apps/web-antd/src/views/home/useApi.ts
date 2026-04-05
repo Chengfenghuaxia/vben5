@@ -10,7 +10,8 @@ export interface SiteHomeFinData {
 }
 
 export async function fetchSiteHomeFinApi(): Promise<SiteHomeFinData> {
-  const data = await siteRequestClient.get<SiteHomeFinData>('/site/v1/home/fin');
+  const data =
+    await siteRequestClient.get<SiteHomeFinData>('/site/v1/home/fin');
   return data ?? ({} as SiteHomeFinData);
 }
 

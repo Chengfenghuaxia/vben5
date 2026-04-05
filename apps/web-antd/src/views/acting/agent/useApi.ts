@@ -15,7 +15,9 @@ export interface ActingAgentAdConfigEntry {
 export interface ActingAgentRow {
   /** 当前投放平台，默认 meta */
   ad_codes?: ActingAgentAdPlatform | string;
-  ad_config?: Partial<Record<ActingAgentAdPlatform | string, ActingAgentAdConfigEntry>>;
+  ad_config?: Partial<
+    Record<ActingAgentAdPlatform | string, ActingAgentAdConfigEntry>
+  >;
   agent_type?: null | number;
   id: number;
   is_single?: null | number;
@@ -53,14 +55,20 @@ function normalizeListPayload(raw: unknown): ActingAgentListResult {
   const d = raw as Record<string, unknown>;
   const list = (d.list ?? d.items ?? []) as ActingAgentRow[];
   const total = Number(d.total ?? d.count ?? list.length);
-  return { list: Array.isArray(list) ? list : [], total: Number.isFinite(total) ? total : 0 };
+  return {
+    list: Array.isArray(list) ? list : [],
+    total: Number.isFinite(total) ? total : 0,
+  };
 }
 
 /** POST /site/v1/agent/list */
 export async function fetchActingAgentListApi(
   params: Recordable<unknown>,
 ): Promise<ActingAgentListResult> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/agent/list', params);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/agent/list',
+    params,
+  );
   return normalizeListPayload(data);
 }
 
@@ -75,7 +83,9 @@ export async function createActingAgentApi(body: ActingAgentSaveBody) {
 }
 
 /** POST /site/v1/agent/update */
-export async function updateActingAgentApi(body: ActingAgentSaveBody & { id: number }) {
+export async function updateActingAgentApi(
+  body: ActingAgentSaveBody & { id: number },
+) {
   return siteRequestClient.post<unknown>('/site/v1/agent/update', body);
 }
 

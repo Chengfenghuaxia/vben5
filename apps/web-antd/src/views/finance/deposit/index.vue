@@ -3,14 +3,14 @@
  * 财务管理 / 充值订单 — 接口与字段对齐 site_ui `finance/deposit`，实现为 Vben Grid + Modal。
  * 菜单：`component: /finance/deposit/index`，`path: /finance/deposit`，`name: FinanceDeposit`
  */
-import type { FinanceDepositRow } from '#/api/core/finance-deposit';
+import type { FinanceDepositRow } from './useApi';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { Page } from '@vben/common-ui';
 import {
   exportFinanceDepositListApi,
   fetchFinanceDepositListApi,
-} from '#/api/core/finance-deposit';
+} from './useApi';
 import { SITE_FINANCE_DEPOSIT_PERM } from '#/constants/site-finance-deposit-perm';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { siteDateTimeWallRangeToUtcMillis } from '#/utils/datetime';

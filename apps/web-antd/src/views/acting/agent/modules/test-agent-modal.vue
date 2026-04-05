@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ActingAgentRow } from '#/api/core/acting-agent';
+import type { ActingAgentRow } from '../useApi';
 
 import { computed } from 'vue';
 

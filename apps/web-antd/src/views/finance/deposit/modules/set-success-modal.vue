@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { FinanceDepositRow } from '#/api/core/finance-deposit';
+import type { FinanceDepositRow } from '../useApi';
 
 import { useVbenModal } from '@vben/common-ui';
 import { message } from 'ant-design-vue';
 import { computed, nextTick, watch } from 'vue';
 
-import { setFinanceDepositSuccessApi } from '#/api/core/finance-deposit';
+import { setFinanceDepositSuccessApi } from '../useApi';
 import { useVbenForm, z } from '#/adapter/form';
 
 defineOptions({ name: 'FinanceDepositSetSuccessModal' });

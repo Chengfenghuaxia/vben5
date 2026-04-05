@@ -1,17 +1,11 @@
 <script lang="ts" setup>
-import type {
-  ActingAgentAdConfigEntry,
-  ActingAgentRow,
-} from '#/api/core/acting-agent';
+import type { ActingAgentAdConfigEntry, ActingAgentRow } from '../useApi';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
-import {
-  createActingAgentApi,
-  updateActingAgentApi,
-} from '#/api/core/acting-agent';
+import { createActingAgentApi, updateActingAgentApi } from '../useApi';
 import { useVbenForm } from '#/adapter/form';
 
 import { useDrawerFormSchema } from '../data';
@@ -51,7 +45,10 @@ function rowAdFields(row: ActingAgentRow): Record<string, string> {
     o[`${p}_test_code`] = e?.test_code ?? '';
   }
   const code = row.ad_codes;
-  if (typeof code === 'string' && AD_PLATFORMS.includes(code as (typeof AD_PLATFORMS)[number])) {
+  if (
+    typeof code === 'string' &&
+    AD_PLATFORMS.includes(code as (typeof AD_PLATFORMS)[number])
+  ) {
     o.ad_platform = code;
   }
   return o;
@@ -126,7 +123,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
     await formApi.resetForm();
 
     const editRow =
-      data && 'id' in data && data.id != null ? (data as ActingAgentRow) : undefined;
+      data && 'id' in data && data.id != null
+        ? (data as ActingAgentRow)
+        : undefined;
     if (editRow) {
       formData.value = editRow;
       id.value = editRow.id;

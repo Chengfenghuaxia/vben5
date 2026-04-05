@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { ActingTeamRow } from '#/api/core/acting-team';
+import type { ActingTeamRow } from './useApi';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { Page } from '@vben/common-ui';
-import { deleteActingTeamApi, fetchActingTeamListApi } from '#/api/core/acting-team';
+import { deleteActingTeamApi, fetchActingTeamListApi } from './useApi';
 import { SITE_TEAM_PERM } from '#/constants/site-team-perm';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { Button, message, Popconfirm } from 'ant-design-vue';
@@ -42,7 +42,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
           if (Array.isArray(teamIds) && teamIds.length > 0) {
             params.team_ids = teamIds;
           }
-          if (formValues.name != null && String(formValues.name).trim() !== '') {
+          if (
+            formValues.name != null &&
+            String(formValues.name).trim() !== ''
+          ) {
             params.name = String(formValues.name).trim();
           }
           try {
@@ -103,10 +106,18 @@ async function onDelete(row: ActingTeamRow) {
 
 <template>
   <Page auto-content-height>
-    <TeamFormModal v-model:open="formOpen" :row="editingRow" @success="onRefresh" />
+    <TeamFormModal
+      v-model:open="formOpen"
+      :row="editingRow"
+      @success="onRefresh"
+    />
     <Grid table-title="推广总代">
       <template #toolbar-tools>
-        <Button v-site-permission="SITE_TEAM_PERM.ADD" type="primary" @click="openCreate">
+        <Button
+          v-site-permission="SITE_TEAM_PERM.ADD"
+          type="primary"
+          @click="openCreate"
+        >
           新增
         </Button>
       </template>

@@ -6,7 +6,7 @@ import { computed, watch } from 'vue';
 import {
   createFinanceDepositOrderApi,
   fetchFinChannelAllListApi,
-} from '#/api/core/finance-deposit';
+} from '../useApi';
 import { useVbenForm, z } from '#/adapter/form';
 
 async function fetchPayInChannels() {

@@ -30,14 +30,20 @@ function normalizeTeamListPayload(raw: unknown): ActingTeamListResult {
   const d = raw as Record<string, unknown>;
   const list = (d.list ?? d.items ?? []) as ActingTeamRow[];
   const total = Number(d.total ?? d.count ?? list.length);
-  return { list: Array.isArray(list) ? list : [], total: Number.isFinite(total) ? total : 0 };
+  return {
+    list: Array.isArray(list) ? list : [],
+    total: Number.isFinite(total) ? total : 0,
+  };
 }
 
 /** POST /site/v1/team/list */
 export async function fetchActingTeamListApi(
   params: Recordable<unknown>,
 ): Promise<ActingTeamListResult> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/team/list', params);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/team/list',
+    params,
+  );
   return normalizeTeamListPayload(data);
 }
 
@@ -54,12 +60,17 @@ export async function createActingTeamApi(body: ActingTeamSaveBody) {
 }
 
 /** POST /site/v1/team/update */
-export async function updateActingTeamApi(body: ActingTeamSaveBody & { id: number | string }) {
+export async function updateActingTeamApi(
+  body: ActingTeamSaveBody & { id: number | string },
+) {
   return siteRequestClient.post<unknown>('/site/v1/team/update', body);
 }
 
 /** POST /site/v1/team/del — 单条 { id } 或批量 { ids } */
-export async function deleteActingTeamApi(body: { id?: number | string; ids?: number[] }) {
+export async function deleteActingTeamApi(body: {
+  id?: number | string;
+  ids?: number[];
+}) {
   return siteRequestClient.post<unknown>('/site/v1/team/del', body);
 }
 

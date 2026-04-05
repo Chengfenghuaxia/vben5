@@ -10,10 +10,7 @@ import {
 } from 'ant-design-vue';
 import { computed, h, reactive, ref, watch } from 'vue';
 
-import {
-  deleteExportRecordApi,
-  fetchExportRecordApi,
-} from '#/api/core/acting-data-tracking';
+import { deleteExportRecordApi, fetchExportRecordApi } from '../useApi';
 import { formatSiteDateTime } from '#/utils/datetime';
 
 defineOptions({ name: 'FinanceDepositExportRecordModal' });

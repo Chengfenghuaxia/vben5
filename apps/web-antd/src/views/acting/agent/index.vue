@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { ActingAgentRow } from '#/api/core/acting-agent';
+import type { ActingAgentRow } from './useApi';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import { Page, useVbenDrawer } from '@vben/common-ui';
-import { fetchActingAgentListApi } from '#/api/core/acting-agent';
+import { fetchActingAgentListApi } from './useApi';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { Button, message, Tag } from 'ant-design-vue';
 import { ref } from 'vue';
@@ -153,7 +153,10 @@ function openTest(row: ActingAgentRow) {
         </Tag>
       </template>
       <template #colPwaType="{ row }">
-        <Tag v-if="row.pwa_type != null" :color="PWA_TYPE_MAP[row.pwa_type]?.color">
+        <Tag
+          v-if="row.pwa_type != null"
+          :color="PWA_TYPE_MAP[row.pwa_type]?.color"
+        >
           {{ PWA_TYPE_MAP[row.pwa_type]?.label ?? row.pwa_type }}
         </Tag>
       </template>

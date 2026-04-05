@@ -4,11 +4,11 @@ import type { VxeTableGridColumns } from '#/adapter/vxe-table';
 import {
   fetchAgentAllListApi,
   fetchTeamAllListApi,
-} from '#/api/core/acting-agent';
+} from '#/views/acting/agent/useApi';
 import {
   fetchDepositTemplateListApi,
   fetchFinChannelAllListApi,
-} from '#/api/core/finance-deposit';
+} from './useApi';
 import {
   defaultSiteTodayWallDateTimeRange,
   formatSiteDateTime,
