@@ -122,6 +122,10 @@ interface RouteMeta {
    */
   query?: Recordable;
   /**
+   * Site 后台菜单节点携带的权限 id 列表（按钮/接口粒度），与 web-antd `v-site-permission` 配套
+   */
+  apis?: number[];
+  /**
    * 标题名称
    */
   title: string;

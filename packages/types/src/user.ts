@@ -12,6 +12,11 @@ interface UserInfo extends BasicUserInfo {
   homePath: string;
 
   /**
+   * site 后台 `/site/v1/admin/info` 的 `load_location`：IANA 时区，用于列表/报表时间展示
+   */
+  loadLocation?: string;
+
+  /**
    * accessToken
    */
   token: string;

@@ -21,7 +21,33 @@ import { refreshTokenApi } from './core';
 
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
-function createRequestClient(baseURL: string, options?: RequestClientOptions) {
+/**
+ * site 接口 baseURL：
+ * - 显式 VITE_GLOB_SITE_API_URL（开发可填 https://s1... 直连）
+ * - 生产未配置时：同源相对路径 ''（与当前访问域名一致，如 https://你的域名/site/v1/...）
+ * - 开发：若配置了 VITE_PROXY_SITE_TARGET，用 '' 走 Vite /site 代理
+ * - 否则与主接口一致（本地 Mock 时为 /api → /api/site/v1/...）
+ */
+function resolveSiteApiBase(): string {
+  const explicit = String(import.meta.env.VITE_GLOB_SITE_API_URL ?? '').trim();
+  if (explicit) {
+    return explicit;
+  }
+  if (import.meta.env.PROD) {
+    return '';
+  }
+  const proxyTarget = String(import.meta.env.VITE_PROXY_SITE_TARGET ?? '').trim();
+  if (proxyTarget) {
+    return '';
+  }
+  return apiURL;
+}
+
+function createRequestClient(
+  baseURL: string,
+  options?: RequestClientOptions,
+  authenticateExtras?: { ignore401ForRequest?: (config: any) => boolean },
+) {
   const client = new RequestClient({
     ...options,
     baseURL,
@@ -56,8 +82,14 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     return newToken;
   }
 
+  /** site 后台通常要求 Header 直接带 token，不加 Bearer 前缀 */
   function formatToken(token: null | string) {
-    return token ? `Bearer ${token}` : null;
+    if (!token) {
+      return null;
+    }
+    const raw =
+      String(import.meta.env.VITE_GLOB_API_AUTH_RAW_HEADER || '') === 'true';
+    return raw ? token : `Bearer ${token}`;
   }
 
   // 请求头处理
@@ -71,12 +103,15 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     },
   });
 
-  // 处理返回的响应数据格式
   client.addResponseInterceptor(
     defaultResponseInterceptor({
       codeField: 'code',
       dataField: 'data',
-      successCode: 0,
+      successCode: (code) =>
+        code === 0 ||
+        code === '0' ||
+        code === '0000' ||
+        Number(code) === 0,
     }),
   );
 
@@ -88,6 +123,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       doRefreshToken,
       enableRefreshToken: preferences.app.enableRefreshToken,
       formatToken,
+      ...authenticateExtras,
     }),
   );
 
@@ -97,7 +133,11 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 message.error 提示 msg
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
-      const errorMessage = responseData?.error ?? responseData?.message ?? '';
+      const errorMessage =
+        responseData?.error ??
+        responseData?.message ??
+        responseData?.msg ??
+        '';
       // 如果没有错误信息，则会根据状态码进行提示
       message.error(errorMessage || msg);
     }),
@@ -109,5 +149,14 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 export const requestClient = createRequestClient(apiURL, {
   responseReturn: 'data',
 });
+
+export const siteRequestClient = createRequestClient(
+  resolveSiteApiBase(),
+  { responseReturn: 'data' },
+  {
+    ignore401ForRequest: (config) =>
+      String(config?.url ?? '').includes('/site/v1/admin/login'),
+  },
+);
 
 export const baseRequestClient = new RequestClient({ baseURL: apiURL });

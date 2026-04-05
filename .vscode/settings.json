@@ -238,5 +238,11 @@
   },
   "commentTranslate.hover.enabled": false,
   "commentTranslate.multiLineMerge": true,
-  "vue.server.hybridMode": true
+  "vue.server.hybridMode": true,
+
+  // Vetur 无法正确解析 #/ 与 workspace 包，会报 Vetur(2307)；Vue3 请用 Volar。若仍装着 Vetur，至少关掉脚本校验避免误报红。
+  "vetur.validation.script": false,
+  "vetur.validation.template": false,
+  "vetur.validation.style": false,
+  "vetur.ignoreProjectWarning": true
 }

@@ -11,6 +11,8 @@ import { useTitle } from '@vueuse/core';
 
 import { $t, setupI18n } from '#/locales';
 
+import { sitePermissionDirective } from '#/directives/site-permission';
+
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
 import App from './app.vue';
@@ -22,6 +24,9 @@ async function bootstrap(namespace: string) {
 
   // 初始化表单组件
   await initSetupVbenForm();
+
+  // VXE Table（useVbenVxeGrid）依赖表单适配器，须在 initSetupVbenForm 之后加载
+  await import('#/adapter/vxe-table');
 
   // // 设置弹窗的默认配置
   // setDefaultModalProps({
@@ -48,6 +53,7 @@ async function bootstrap(namespace: string) {
 
   // 安装权限指令
   registerAccessDirective(app);
+  app.directive('site-permission', sitePermissionDirective);
 
   // 初始化 tippy
   const { initTippy } = await import('@vben/common-ui/es/tippy');

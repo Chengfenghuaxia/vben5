@@ -50,18 +50,24 @@ export const authenticateResponseInterceptor = ({
   doRefreshToken,
   enableRefreshToken,
   formatToken,
+  /** 返回 true 时不做登出/刷新（如登录接口密码错误也返回 401） */
+  ignore401ForRequest,
 }: {
   client: RequestClient;
   doReAuthenticate: () => Promise<void>;
   doRefreshToken: () => Promise<string>;
   enableRefreshToken: boolean;
   formatToken: (token: string) => null | string;
+  ignore401ForRequest?: (config: any) => boolean;
 }): ResponseInterceptorConfig => {
   return {
     rejected: async (error) => {
       const { config, response } = error;
       // 如果不是 401 错误，直接抛出异常
       if (response?.status !== 401) {
+        throw error;
+      }
+      if (ignore401ForRequest?.(config)) {
         throw error;
       }
       // 判断是否启用了 refreshToken 功能

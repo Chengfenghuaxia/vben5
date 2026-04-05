@@ -30,15 +30,20 @@ export function verifyAccessToken(
   event: H3Event<EventHandlerRequest>,
 ): null | Omit<UserInfo, 'password'> {
   const authHeader = getHeader(event, 'Authorization');
-  if (!authHeader?.startsWith('Bearer')) {
+  if (!authHeader) {
     return null;
   }
 
-  const tokenParts = authHeader.split(' ');
-  if (tokenParts.length !== 2) {
-    return null;
+  let token: string;
+  if (authHeader.startsWith('Bearer ')) {
+    const tokenParts = authHeader.split(' ');
+    if (tokenParts.length !== 2) {
+      return null;
+    }
+    token = tokenParts[1] as string;
+  } else {
+    token = authHeader;
   }
-  const token = tokenParts[1] as string;
   try {
     const decoded = jwt.verify(
       token,

@@ -10,8 +10,27 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
+import {
+  fetchSiteAdminInfoApi,
+  getAccessCodesApi,
+  getUserInfoApi,
+  loginApi,
+  logoutApi,
+  mapSiteAdminToUserInfo,
+  siteAdminAuthBindApi,
+} from '#/api';
 import { $t } from '#/locales';
+
+export interface GoogleBindPayload {
+  qrcode: string;
+  secret?: string;
+}
+
+export interface AuthLoginResult {
+  googleBind?: GoogleBindPayload;
+  needGoogleBind?: boolean;
+  userInfo: null | UserInfo;
+}
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
@@ -20,53 +39,58 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false);
 
-  /**
-   * 异步处理登录操作
-   * Asynchronously handle the login process
-   * @param params 登录表单数据
-   */
   async function authLogin(
     params: Recordable<any>,
     onSuccess?: () => Promise<void> | void,
-  ) {
-    // 异步处理用户登录操作并获取 accessToken
+  ): Promise<AuthLoginResult> {
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
       const { accessToken } = await loginApi(params);
 
-      // 如果成功获取到 accessToken
-      if (accessToken) {
-        accessStore.setAccessToken(accessToken);
+      if (!accessToken) {
+        return { userInfo: null };
+      }
 
-        // 获取用户信息并存储到 accessStore 中
-        const [fetchUserInfoResult, accessCodes] = await Promise.all([
-          fetchUserInfo(),
-          getAccessCodesApi(),
-        ]);
+      accessStore.setAccessToken(accessToken);
 
-        userInfo = fetchUserInfoResult;
+      const rawInfo = await fetchSiteAdminInfoApi();
+      if (rawInfo?.auth_qrcode) {
+        return {
+          googleBind: {
+            qrcode: String(rawInfo.auth_qrcode),
+            secret:
+              typeof rawInfo.auth_secret === 'string'
+                ? rawInfo.auth_secret
+                : undefined,
+          },
+          needGoogleBind: true,
+          userInfo: null,
+        };
+      }
 
-        userStore.setUserInfo(userInfo);
-        accessStore.setAccessCodes(accessCodes);
+      userInfo = mapSiteAdminToUserInfo(rawInfo);
+      userStore.setUserInfo(userInfo);
 
-        if (accessStore.loginExpired) {
-          accessStore.setLoginExpired(false);
-        } else {
-          onSuccess
-            ? await onSuccess?.()
-            : await router.push(
-                userInfo.homePath || preferences.app.defaultHomePath,
-              );
-        }
+      const accessCodes = await getAccessCodesApi();
+      accessStore.setAccessCodes(accessCodes);
 
-        if (userInfo?.realName) {
-          notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            duration: 3,
-            message: $t('authentication.loginSuccess'),
-          });
-        }
+      if (accessStore.loginExpired) {
+        accessStore.setLoginExpired(false);
+      } else {
+        onSuccess
+          ? await onSuccess?.()
+          : await router.push(
+              userInfo.homePath || preferences.app.defaultHomePath,
+            );
+      }
+
+      if (userInfo?.realName) {
+        notification.success({
+          description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+          duration: 3,
+          message: $t('authentication.loginSuccess'),
+        });
       }
     } finally {
       loginLoading.value = false;
@@ -77,16 +101,26 @@ export const useAuthStore = defineStore('auth', () => {
     };
   }
 
+  /**
+   * 谷歌验证绑定（成功后清空登录态，需重新登录）
+   */
+  async function bindGoogleAuth(authCode: string) {
+    await siteAdminAuthBindApi({ auth_code: authCode });
+    notification.success({
+      message: '绑定成功，请重新登录',
+    });
+    await logout(false);
+  }
+
   async function logout(redirect: boolean = true) {
     try {
       await logoutApi();
     } catch {
-      // 不做任何处理
+      // 后端未实现 logout 时可忽略
     }
     resetAllStores();
     accessStore.setLoginExpired(false);
 
-    // 回登录页带上当前路由地址
     await router.replace({
       path: LOGIN_PATH,
       query: redirect
@@ -110,6 +144,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     $reset,
     authLogin,
+    bindGoogleAuth,
     fetchUserInfo,
     loginLoading,
     logout,
