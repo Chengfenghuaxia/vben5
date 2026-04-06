@@ -20,6 +20,8 @@ import {
   siteAdminAuthBindApi,
 } from '#/api';
 import { $t } from '#/locales';
+import { closeSiteMqtt } from '#/utils/site-mqtt';
+import { setSiteAdminInfoForMqtt } from '#/utils/site-mqtt-refresh';
 
 export interface GoogleBindPayload {
   qrcode: string;
@@ -71,6 +73,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       userInfo = mapSiteAdminToUserInfo(rawInfo);
       userStore.setUserInfo(userInfo);
+      setSiteAdminInfoForMqtt(rawInfo);
 
       const accessCodes = await getAccessCodesApi();
       accessStore.setAccessCodes(accessCodes);
@@ -118,6 +121,7 @@ export const useAuthStore = defineStore('auth', () => {
     } catch {
       // 后端未实现 logout 时可忽略
     }
+    closeSiteMqtt();
     resetAllStores();
     accessStore.setLoginExpired(false);
 

@@ -24,10 +24,17 @@ export interface SiteAdminInfoRaw {
   id?: number | string;
   /** IANA 时区，与 site_ui userinfo.load_location 一致，用于全站时间展示 */
   load_location?: string;
+  /** 是否接收 MQTT：仅 `1` 开启（与 site_ui `userinfo.notify === 1` 一致） */
+  notify?: number | string;
   real_name?: string;
   role?: string;
   roles?: string[];
+  /** 站点编码，MQTT 订阅 `broadcast/fin/${site}` */
+  site?: string;
+  site_code?: string;
   username?: string;
+  uid?: number | string;
+  user_id?: number | string;
   [key: string]: unknown;
 }
 

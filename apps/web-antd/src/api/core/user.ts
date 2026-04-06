@@ -2,6 +2,8 @@ import type { UserInfo } from '@vben/types';
 
 import { preferences } from '@vben/preferences';
 
+import { setSiteAdminInfoForMqtt } from '#/utils/site-mqtt-refresh';
+
 import { fetchSiteAdminInfoApi, type SiteAdminInfoRaw } from './site-auth';
 
 function mapSiteAdminToUserInfo(raw: SiteAdminInfoRaw): UserInfo {
@@ -45,6 +47,7 @@ function mapSiteAdminToUserInfo(raw: SiteAdminInfoRaw): UserInfo {
  */
 export async function getUserInfoApi() {
   const raw = await fetchSiteAdminInfoApi();
+  setSiteAdminInfoForMqtt(raw);
   return mapSiteAdminToUserInfo(raw);
 }
 
