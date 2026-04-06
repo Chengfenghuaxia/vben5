@@ -205,6 +205,40 @@ export default eventHandler((event) => {
         sort: 4,
         url: 'Manage',
       },
+      {
+        children: [
+          {
+            component: '/message/msgnotification/index',
+            icon: 'lucide:bell',
+            name: '消息通知',
+            path: '/message/msgnotification',
+            sort: 0,
+            url: 'MessageMsgnotification',
+          },
+        ],
+        icon: 'lucide:message-square-text',
+        name: '消息管理',
+        path: '/message',
+        sort: 5,
+        url: 'Message',
+      },
+      {
+        children: [
+          {
+            component: '/log/operationlog/index',
+            icon: 'lucide:scroll-text',
+            name: '操作日志',
+            path: '/log/operationlog',
+            sort: 0,
+            url: 'LogOperationlog',
+          },
+        ],
+        icon: 'lucide:clipboard-list',
+        name: '日志管理',
+        path: '/log',
+        sort: 6,
+        url: 'Log',
+      },
     ],
   });
 });
