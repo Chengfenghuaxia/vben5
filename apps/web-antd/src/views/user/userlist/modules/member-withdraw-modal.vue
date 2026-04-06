@@ -86,7 +86,12 @@ async function saveEdit() {
 
 const columns = [
   { dataIndex: 'account_no', key: 'account_no', title: '银行卡号', width: 160 },
-  { dataIndex: 'account_type', key: 'account_type', title: '账号类型', width: 100 },
+  {
+    dataIndex: 'account_type',
+    key: 'account_type',
+    title: '账号类型',
+    width: 100,
+  },
   {
     dataIndex: 'account_name',
     key: 'account_name',

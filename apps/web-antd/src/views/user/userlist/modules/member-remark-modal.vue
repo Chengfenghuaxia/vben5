@@ -36,9 +36,7 @@ const model = reactive({
 watch(open, (v) => {
   if (v && props.row) {
     model.remark =
-      props.opentype === 'updaterem'
-        ? String(props.row.remark ?? '')
-        : '';
+      props.opentype === 'updaterem' ? String(props.row.remark ?? '') : '';
   }
 });
 
@@ -111,7 +109,9 @@ async function handleOk() {
     <template #footer>
       <Space>
         <Button @click="close">取消</Button>
-        <Button type="primary" :loading="loading" @click="handleOk">确认</Button>
+        <Button type="primary" :loading="loading" @click="handleOk"
+          >确认</Button
+        >
       </Space>
     </template>
   </Modal>

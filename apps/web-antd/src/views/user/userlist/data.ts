@@ -43,7 +43,11 @@ export function useSiteMemberGridFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Input',
-      componentProps: { allowClear: true, maxlength: 11, placeholder: '手机号' },
+      componentProps: {
+        allowClear: true,
+        maxlength: 11,
+        placeholder: '手机号',
+      },
       fieldName: 'phone',
       label: '手机号',
     },
@@ -186,8 +190,18 @@ export function useSiteMemberGridFormSchema(): VbenFormSchema[] {
 export function useSiteMemberColumns(): VxeTableGridColumns {
   return [
     { type: 'seq', title: '#', width: 48 },
-    { field: 'team_name', minWidth: 120, showOverflow: true, title: '总代名称' },
-    { field: 'agent_name', minWidth: 120, showOverflow: true, title: '渠道名称' },
+    {
+      field: 'team_name',
+      minWidth: 120,
+      showOverflow: true,
+      title: '总代名称',
+    },
+    {
+      field: 'agent_name',
+      minWidth: 120,
+      showOverflow: true,
+      title: '渠道名称',
+    },
     { field: 'id', title: '用户ID', width: 100 },
     {
       field: 'status',
@@ -321,18 +335,14 @@ export function useSiteMemberColumns(): VxeTableGridColumns {
     {
       field: 'login_at',
       formatter: ({ cellValue }: { cellValue: unknown }) =>
-        cellValue
-          ? formatSiteDateTime(cellValue as number | string)
-          : '—',
+        cellValue ? formatSiteDateTime(cellValue as number | string) : '—',
       title: '上次登录时间',
       width: 170,
     },
     {
       field: 'first_deposit_at',
       formatter: ({ cellValue }: { cellValue: unknown }) =>
-        cellValue
-          ? formatSiteDateTime(cellValue as number | string)
-          : '—',
+        cellValue ? formatSiteDateTime(cellValue as number | string) : '—',
       title: '首充时间',
       width: 170,
     },

@@ -98,10 +98,7 @@ export async function deleteSiteMemberApi(body: {
 
 /** POST /site/v1/user/user/pwd/reset */
 export async function resetSiteMemberPwdApi(body: { uid: number | string }) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/user/user/pwd/reset',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/user/user/pwd/reset', body);
 }
 
 /** POST /site/v1/user/status */
@@ -155,10 +152,7 @@ export async function setSiteMemberSuperiorApi(body: {
 export async function updateSiteMemberWithdrawalInfoApi(
   body: Recordable<unknown>,
 ) {
-  return siteRequestClient.post<unknown>(
-    '/site/v1/user/withdrawal/info',
-    body,
-  );
+  return siteRequestClient.post<unknown>('/site/v1/user/withdrawal/info', body);
 }
 
 /** POST /site/v1/risk/user/ws/abnormal/add */
@@ -206,7 +200,10 @@ export async function fetchActivityListForMemberMapApi(): Promise<
 export async function fetchSiteMsgListApi(
   params: Recordable<unknown>,
 ): Promise<{ list: Record<string, unknown>[]; total: number }> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/msg/list', params);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/msg/list',
+    params,
+  );
   if (data == null || typeof data !== 'object') {
     return { list: [], total: 0 };
   }

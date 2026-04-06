@@ -84,7 +84,13 @@ async function onDel(id: unknown) {
 
 const columns = [
   { dataIndex: 'uid', key: 'uid', title: '用户ID', width: 100 },
-  { dataIndex: 'title', ellipsis: true, key: 'title', title: '标题', width: 140 },
+  {
+    dataIndex: 'title',
+    ellipsis: true,
+    key: 'title',
+    title: '标题',
+    width: 140,
+  },
   {
     dataIndex: 'content',
     ellipsis: true,

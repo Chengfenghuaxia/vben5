@@ -98,7 +98,9 @@ async function handleOk() {
     <template #footer>
       <Space>
         <Button @click="close">取消</Button>
-        <Button type="primary" :loading="loading" @click="handleOk">确认</Button>
+        <Button type="primary" :loading="loading" @click="handleOk"
+          >确认</Button
+        >
       </Space>
     </template>
   </Modal>

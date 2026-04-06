@@ -160,7 +160,11 @@ async function handleOk() {
         </Col>
         <Col :span="12">
           <FormItem label="电话区号" required>
-            <Input v-model:value="model.area_code" allow-clear placeholder="区号" />
+            <Input
+              v-model:value="model.area_code"
+              allow-clear
+              placeholder="区号"
+            />
           </FormItem>
         </Col>
         <Col :span="12">
@@ -235,7 +239,9 @@ async function handleOk() {
     <template #footer>
       <Space>
         <Button @click="close">取消</Button>
-        <Button type="primary" :loading="loading" @click="handleOk">确认</Button>
+        <Button type="primary" :loading="loading" @click="handleOk"
+          >确认</Button
+        >
       </Space>
     </template>
   </Modal>

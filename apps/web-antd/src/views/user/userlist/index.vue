@@ -548,9 +548,7 @@ onActivated(async () => {
       <template #colRegIp="{ row }">
         <div class="whitespace-pre-line text-left">
           {{ row.addip ?? '—' }}
-          <template v-if="row.addr">
-            {{ '\n' }}{{ row.addr }}
-          </template>
+          <template v-if="row.addr"> {{ '\n' }}{{ row.addr }} </template>
         </div>
       </template>
 

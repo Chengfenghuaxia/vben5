@@ -122,7 +122,11 @@ async function handleOk() {
         </Col>
         <Col :span="24">
           <FormItem label="备注">
-            <Input v-model:value="model.remark" allow-clear placeholder="备注" />
+            <Input
+              v-model:value="model.remark"
+              allow-clear
+              placeholder="备注"
+            />
           </FormItem>
         </Col>
       </Row>
@@ -130,7 +134,9 @@ async function handleOk() {
     <template #footer>
       <Space>
         <Button @click="close">取消</Button>
-        <Button type="primary" :loading="loading" @click="handleOk">确认</Button>
+        <Button type="primary" :loading="loading" @click="handleOk"
+          >确认</Button
+        >
       </Space>
     </template>
   </Modal>
