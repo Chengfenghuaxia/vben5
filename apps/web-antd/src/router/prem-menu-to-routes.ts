@@ -158,6 +158,8 @@ const SITE_LEAF_VIEW_FALLBACK_BY_URL: Record<string, string> = {
   manage_ip: '/manage/ip/index',
   manage_role: '/manage/role/index',
   manage_userlist: '/manage/userlist/index',
+  UserUserlist: '/user/userlist/index',
+  user_userlist: '/user/userlist/index',
 };
 
 /** 错误的全路径 → 本仓库 views 下的页面（与 site_ui 菜单 path 配置错误时兜底） */
