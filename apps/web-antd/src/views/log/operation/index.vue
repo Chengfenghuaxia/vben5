@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 /**
- * 日志管理 / 操作日志 — 菜单 `component: /log/operationlog/index`，`path: /log/operationlog`
+ * 日志管理 / 操作日志 — prem：`path: /log/operation`，`url: log_operation`，`component: view.log_operation`
  */
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
@@ -12,12 +12,9 @@ import { message } from 'ant-design-vue';
 import type { OperationLogRow } from './useApi';
 import { fetchOperationLogListApi } from './useApi';
 
-import {
-  useOperationLogColumns,
-  useOperationLogGridFormSchema,
-} from './data';
+import { useOperationLogColumns, useOperationLogGridFormSchema } from './data';
 
-defineOptions({ name: 'LogOperationlog' });
+defineOptions({ name: 'LogOperation' });
 
 const [Grid] = useVbenVxeGrid({
   formOptions: {

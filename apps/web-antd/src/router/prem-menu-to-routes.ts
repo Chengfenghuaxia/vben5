@@ -146,10 +146,14 @@ const PLACEHOLDER_VIEW = '/_core/fallback/coming-soon';
  * 解析成不存在的 `/role/index` 而落到占位页。此处按 site 常用 `url` 与错误 path 回退到真实页面。
  */
 const SITE_LEAF_VIEW_FALLBACK_BY_URL: Record<string, string> = {
+  LogOperation: '/log/operation/index',
+  LogOperationlog: '/log/operation/index',
   ManageDep: '/manage/dep/index',
   ManageIp: '/manage/ip/index',
   ManageRole: '/manage/role/index',
   ManageUserlist: '/manage/userlist/index',
+  log_operation: '/log/operation/index',
+  log_operationlog: '/log/operation/index',
   manage_dep: '/manage/dep/index',
   manage_ip: '/manage/ip/index',
   manage_role: '/manage/role/index',
@@ -159,6 +163,10 @@ const SITE_LEAF_VIEW_FALLBACK_BY_URL: Record<string, string> = {
 /** 错误的全路径 → 本仓库 views 下的页面（与 site_ui 菜单 path 配置错误时兜底） */
 const SITE_LEAF_VIEW_FALLBACK_BY_ROUTE_PATH: Record<string, string> = {
   '/ip': '/manage/ip/index',
+  '/log/operation': '/log/operation/index',
+  '/manage_ip': '/manage/ip/index',
+  '/manage_role': '/manage/role/index',
+  '/operationlog': '/log/operation/index',
   '/role': '/manage/role/index',
 };
 
@@ -198,6 +206,26 @@ function viewFileExistsForBackendRoute(componentPath: string): boolean {
     ? normalized
     : `${normalized}.vue`;
   return AVAILABLE_VIEW_PAGE_KEYS.has(pageKey);
+}
+
+/**
+ * 后端常把 component 配成 `/log/operation`（无 `/index`），实际页面在 `.../index.vue`。
+ */
+function resolveExistingViewPath(out: string): null | string {
+  const trimmed = out.replace(/\/$/, '');
+  if (!trimmed) {
+    return null;
+  }
+  if (viewFileExistsForBackendRoute(trimmed)) {
+    return trimmed;
+  }
+  if (!trimmed.endsWith('/index')) {
+    const withIndex = `${trimmed}/index`;
+    if (viewFileExistsForBackendRoute(withIndex)) {
+      return withIndex;
+    }
+  }
+  return null;
 }
 
 function joinPath(parent: string, segment: string): string {
@@ -284,10 +312,11 @@ function resolveLeafComponent(
   if (!out.startsWith('/')) {
     out = `/${out}`;
   }
-  if (!viewFileExistsForBackendRoute(out)) {
+  const resolved = resolveExistingViewPath(out);
+  if (resolved == null) {
     return PLACEHOLDER_VIEW;
   }
-  return out;
+  return resolved;
 }
 
 function resolveLeafComponentWithFallback(

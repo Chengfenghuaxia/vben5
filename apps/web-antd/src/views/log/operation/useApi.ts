@@ -43,6 +43,9 @@ function normalizeOperationLogList(raw: unknown): OperationLogListResult {
 export async function fetchOperationLogListApi(
   params: Recordable<unknown>,
 ): Promise<OperationLogListResult> {
-  const data = await siteRequestClient.post<unknown>('/site/v1/oplog/list', params);
+  const data = await siteRequestClient.post<unknown>(
+    '/site/v1/oplog/list',
+    params,
+  );
   return normalizeOperationLogList(data);
 }
